@@ -41,6 +41,6 @@ This will move the `currentset` file (`today.csv` from our example) to archive, 
 
 `archive` is a boolean (defaulting to true) that, when a *rotate* command is run, will cause the cause the `currentset` file to be renamed (or copied, if `previousset` is set) to the current year-month-day-hour-minute (and will copy the file extension if present). If this value is set to false, no archive will be made. 
 
-`previousset` is a file that the `currentset` will be renamed to when `rotate` command is run. Note that it will be renamed to this file. This will happen regardless of what value `archive` is.  If `archive` is true, then 
+`previousset` is a file that the `currentset` will be renamed to when `rotate` command is run. Note that it will be renamed to this file (not copied). This will happen regardless of what value `archive` is.
 
 *NOTE*: if `archive` is false and `previousset` is null, then when the *rotate* command is run, the `currentset` file *WILL BE DELETED* 
