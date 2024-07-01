@@ -167,8 +167,13 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 		if echo "$HED" | egrep -q '^http'; then
 			docurl "$HED" "$CURRENTSET" $NUMRETRIES;
 		else
-			# assume the value for HED is the header to put into the file
-			echo "$HED" > "$CURRENTSET"
+			if test "$HED" = "null"; then
+				# no header line needed
+				true;
+			else
+				# assume the value for HED is the header to put into the file
+				echo "$HED" > "$CURRENTSET"
+			fi
 		fi
 		rc=$?;
 	fi

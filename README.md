@@ -33,7 +33,7 @@ This will move the `currentset` file (`today.csv` from our example) to archive, 
 
 `datapt` is used to get one data point when a *collect* command is run. It is provided to `curl -sS` if it looks like a URL. If it doesn't look like a URL, it will be executed as a command (so you can write your own customs cript). The output of this curl/command will be appended to the `currentset` file.
 
-`hed` is an optional value that, if it looks like a URL, will be used to grab the column labels for suitable a set of data points. This value will be used when creating new `currentset` files. If it's not a URL, it will be interpretted as the the literal header line itself.
+`hed` is an optional value that, if it looks like a URL, will be used to grab the column labels for suitable a set of data points. This value will be used when creating new `currentset` files. If it's not a URL, it will be interpretted as the the literal header line itself. If this value is set to *null* no header line will be added to new data set files.
 
 `currentset` is the file that data points are stored in when a *collect* command is run. Each new point gets appended to the bottom. The output of `hed` will be put at the top each time the file is created. The file will archived or deleted when `rotate` command is run.
 
