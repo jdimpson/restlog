@@ -1,7 +1,7 @@
 # restlog -- simple tool to log and manage data points from a RESTful web-based endpoint
 
 ## example
-
+# init
 ```
 user1@home.local:~ $ ./restlog.sh init --datapt http://foo.local/rest/csv --hed http://foo.local/rest/csvhed --currentset today.csv --outputdir ./foo-data > foo.json
 user1@home.local:~ $ cat foo.json
