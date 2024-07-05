@@ -77,7 +77,7 @@ doarchive() {
 
 	ext=$(echo "$CURRENTSET" | sed -e 's/^[^.]*//');
 
-	if test -z "$ext"; then
+	if ! test -z "$ext"; then
 		ARCH="$(now_minute).$ext";
 	else
 		ARCH=$(now_minute);
