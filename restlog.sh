@@ -28,12 +28,12 @@ docurl() {
 }
 
 maketemplate() {
-	test -z "$DATAPT"       && local DATAPT='"http://datapoint_url/rest/csv"';
-	test -z "$HED"          && local HED='"http://header_url/rest/csvhed?delete_if_unneeded"';
-	test -z "$CURRENTSET"   && local CURRENTSET='"working_data_file"';
+	test -z "$DATAPT"       && local DATAPT="http://datapoint_url/rest/csv";
+	test -z "$HED"          && local HED="http://header_url/rest/csvhed?delete_if_unneeded";
+	test -z "$CURRENTSET"   && local CURRENTSET="working_data_file";
 	test -z "$PREVIOUSSET"  && local PREVIOUSSET=null;
-	test -z "$ARCHIVE" && local ARCHIVE=true;
-	test -z "$OUTPUTDIR"    && local OUTPUTDIR='"./"';
+	test -z "$ARCHIVE"      && local ARCHIVE=true;
+	test -z "$OUTPUTDIR"    && local OUTPUTDIR="./";
 	test -z "$NUMRETRIES"   && local NUMRETRIES=10
 	# make outputdir fully qualified
 	if test -d "$OUTPUTDIR"; then
@@ -42,8 +42,8 @@ maketemplate() {
 		echo "WARNING: output directory $OUTPUTDIR does not exist or is not accessible" >&2;
 	fi
 
+	# escape strings (unless null)
 	# this section takes a long time when JQ is a docker container
-	# strings can be null, but jq doesn't when it they are null, or the string "null"
 	test "$DATAPT" = "null"      || DATAPT=$(echo "$DATAPT" | $JQ -R);
 	test "$HED" = "null"         || HED=$(echo "$HED" | $JQ -R);
 	test "$CURRENTSET" = "null"  || CURRENTSET=$(echo "$CURRENTSET"| $JQ -R);
@@ -51,6 +51,7 @@ maketemplate() {
 	test "$OUTPUTDIR" = "null"   || OUTPUTDIR=$(echo "$OUTPUTDIR" | $JQ -R);
 	# TODO: check that NUMRESTRIES is an integer
 
+	test $VERB -eq 1 && echo "making template with DATAPT=$DATAPT HED=$HED CURRENTSET=$CURRENTSET PREVIOUSSET=$PREVIOUSSET ARCHIVE=$ARCHIVE OUTPUTDIR=$OUTPUTDIR NUMRETRIES=$NUMRETRIES" >&2;
 
 	local template=$(cat<<EOF
 {
@@ -93,10 +94,16 @@ doarchive() {
 }
 
 usage() {
-	echo "Usage: $0 init    [--datapt http://foo.local/rest/csv] [--hed http://foo.local/rest/csvhed] [--currentset today.csv] [--outputdir ./foo-data ] > <json file>" >&2;
-	echo "       $0 rotate  <json file>" >&2;
-	echo "       $0 collect <json file>" >&2;
+	echo "Usage: $0 [-v] init    [--datapt http://foo.local/rest/csv] [--hed http://foo.local/rest/csvhed] [--currentset today.csv] [--outputdir ./foo-data ] > <json file>" >&2;
+	echo "       $0 [-v] rotate  <json file>" >&2;
+	echo "       $0 [-v] collect <json file>" >&2;
 }
+
+VERB=0;
+if test "x$1" = "x--verbose" || test "x$1" = "x-v"; then
+	VERB=1;
+	shift;
+fi
 
 if test "$1" = "init"; then
 	shift;
