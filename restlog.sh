@@ -11,13 +11,17 @@ docurl() {
 	local URL="$1";
 	local OUT="$2";
 	local NUMRETRIES="$3";
+	test $VERB -eq 1 && echo "connecting to $URL up to $NUMRETRIES times" >&2;
 	for i in `seq $NUMRETRIES`; do
 		$CURL -sS "$URL" >> "$OUT" 2> /dev/null;
 		rc=$?;
 		if test $rc -eq 0; then
 			#exit 0;
+			test $VERB -eq 1 && echo "succeeded" >&2;
 			return 0;
 		fi
+
+		test $VERB -eq 1 && echo "attempt $i failed; sleeping $i seconds" >&2;
 		sleep $i;
 	done 
 	echo "error communicating with $URL" >&2;
