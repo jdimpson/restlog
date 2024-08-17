@@ -156,7 +156,12 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 		if echo "$DATAPT" | egrep -q '^http'; then
 			docurl "$DATAPT" "$CURRENTSET" $NUMRETRIES;
 		else
-			echo "WARNING: non web-based values for datapt ($DATAPT) are not yet supported." >&2;
+			if test -x "$DATAPT"; then
+				$DATAPT $NUMRETRIES >> "$CURRENTSET";
+			else
+				echo "ERROR: datapt $DATAPT is not a URL or executable." >&2;
+				exit 4;
+			fi
 		fi
 		rc=$?;
 	fi
