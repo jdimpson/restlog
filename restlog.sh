@@ -157,7 +157,7 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 			docurl "$DATAPT" "$CURRENTSET" $NUMRETRIES;
 		else
 			if test -x "$DATAPT"; then
-				$DATAPT $NUMRETRIES >> "$CURRENTSET";
+				$DATAPT >> "$CURRENTSET";
 			else
 				echo "ERROR: datapt $DATAPT is not a URL or executable." >&2;
 				exit 4;
