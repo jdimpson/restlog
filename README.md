@@ -33,19 +33,20 @@ This will move the `currentset` file (`today.csv` from our example) to archive, 
 ## JSON config file
 `datapt` is used to get one data point when a *collect* command is run. It is provided to `curl -sS` if it looks like a URL. If it doesn't look like a URL, it will be executed as a command (so you can write your own custom script). The output of this curl/command will be appended to the `currentset` file.
 
-`hed` is an optional value that, if it looks like a URL, will be used to grab the column labels for suitable a set of data points. This value will be used when creating new `currentset` files. If it's not a URL, it will be interpretted as the the literal header line itself. If this value is set to *null* no header line will be added to new data set files.
+`hed` is an optional value that, if it looks like a URL, will be used to grab the column labels for suitable a set of data points. This value will be used when creating new `currentset` files. If it's not a URL, it will be interpretted as the literal header line itself. If this value is set to *null* no header line will be added to new data set files.
 
 `currentset` is the file that data points are stored in when a *collect* command is run. It will be in the `outputdir`. Each new point gets appended to the bottom. The output of `hed` will be put at the top each time the file is created. The file will archived or deleted when `rotate` command is run. 
 
-`outputdir` is the directory where all other files will be written and stored to. It's safe to put the JSON config file there if you like. If you move this directory, you must manually update the value for `outputdir` in the associated JSON config file.
+`outputdir` is the directory where all data files will be written and stored to, specifically `currentset`, `previousset` if configured, and archive files, if `archive` is true. It's safe to put the JSON config file there if you like. If you move this directory, you must manually update the value for `outputdir` in the associated JSON config file.
 
 `numretries` is the number of times a `datapt` REST URL will be retried if an error is encountered by `curl`, or if the `datapt` command returns an error (non-zero exit code). Note that, in the case where `datapt` is a command that returned an error, any standard output that it generates will not be appended to the `currentset` log.
 
-`archive` is a boolean (defaulting to true) that, when a *rotate* command is run, will cause the `currentset` file to be renamed (or copied, if `previousset` is set) to the current year-month-day-hour-minute (and will copy the file extension if present). If this value is set to false, no archive will be made. 
+`archive` is a boolean (defaulting to true) that, when a *rotate* command is run, will cause the `currentset` file to be renamed (or copied, if `previousset` is set) to the current year-month-day-hour-minute (and will copy the file extension if present) in `outputdir`. If this value is set to false, no archive will be made. 
 
-`previousset` is a file that the `currentset` will be renamed to when `rotate` command is run. Note that it will be renamed to this file (not copied). This will happen regardless of what value `archive` is.
+`previousset` is a file that the `currentset` will be renamed to when `rotate` command is run. Note that it will be renamed to this file (not copied). This will happen regardless of what value `archive` is. This may not be valuable to anyone but me, but I like to have "today" and "yesterday" or "thisweek" and "lastweek" data sets available to some of my visualization scripts without having to figure out the specific dates in my scripts.
 
 *NOTE*: if `archive` is false and `previousset` is null, then when the *rotate* command is run, the `currentset` file *WILL BE DELETED* 
+
 ## example 2
 A specific example using the [speedtest-cli](https://pypi.org/project/speedtest-cli/) program. Once you install it via `pip`, you can run the commands below verbatim to generate weekly data sets full of twice-daily speed reports.
 ### init
