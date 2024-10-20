@@ -156,10 +156,15 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 		if echo "$DATAPT" | egrep -q '^http'; then
 			docurl "$DATAPT" "$CURRENTSET" $NUMRETRIES;
 		else
-			if test -x "$DATAPT"; then
+			if echo "$DATAPT" | grep -q ' '; then
+				TESTCMD=`echo "$DATAPT" | sed -e 's/ .*//'`;
+			else
+				TESTCMD="$DATAPT";
+			fi
+			if test -x `which "$TESTCMD"`; then
 				$DATAPT >> "$CURRENTSET";
 			else
-				echo "ERROR: datapt $DATAPT is not a URL or executable." >&2;
+				echo "ERROR: datapt $TESTCMD is not a URL or executable." >&2;
 				exit 4;
 			fi
 		fi
@@ -168,12 +173,16 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 	if test "$1" = "rotate"; then
 		ARCHIVE=$($JQ -r .archive < "$JSON");
 		PREVIOUSSET=$($JQ -r .previousset < "$JSON");
+		if test "$PREVIOUSSET" = "null"; then
+			PREVIOUSSET=
+		fi
 		if test -e "$CURRENTSET"; then
 			if test $ARCHIVE = "true"; then
 				doarchive "$CURRENTSET" "$PREVIOUSSET";
 			else
 				echo "previousset is $PREVIOUSSET";
-				if test "$PREVIOUSSET" = "null"; then
+				#if test "$PREVIOUSSET" = "null"; then
+				if test -z "$PREVIOUSSET"; then
 					cp /dev/null "$CURRENTSET";
 				else
 					mv "$CURRENTSET" "$PREVIOUSSET";
