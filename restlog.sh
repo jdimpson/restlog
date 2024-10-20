@@ -83,7 +83,7 @@ doarchive() {
 	ext=$(echo "$CURRENTSET" | sed -e 's/^[^.]*//');
 
 	if ! test -z "$ext"; then
-		ARCH="$(now_minute).$ext";
+		ARCH="$(now_minute)$ext";
 	else
 		ARCH=$(now_minute);
 	fi
@@ -172,6 +172,7 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 			if test $ARCHIVE = "true"; then
 				doarchive "$CURRENTSET" "$PREVIOUSSET";
 			else
+				echo "previousset is $PREVIOUSSET";
 				if test "$PREVIOUSSET" = "null"; then
 					cp /dev/null "$CURRENTSET";
 				else
