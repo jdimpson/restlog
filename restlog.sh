@@ -162,7 +162,12 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 				TESTCMD="$DATAPT";
 			fi
 			if test -x `which "$TESTCMD"`; then
-				$DATAPT >> "$CURRENTSET";
+				for i in `seq $NUMRETRIES`; do
+					$DATAPT >> "$CURRENTSET";
+					if test $? -eq 0; then
+						break;
+					fi
+				done
 			else
 				echo "ERROR: datapt $TESTCMD is not a URL or executable." >&2;
 				exit 4;
