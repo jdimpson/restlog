@@ -163,9 +163,14 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 			fi
 			if test -x `which "$TESTCMD"`; then
 				for i in `seq $NUMRETRIES`; do
-					$DATAPT >> "$CURRENTSET";
+					#$DATAPT >> "$CURRENTSET";
+					O=$($DATAPT);
 					if test $? -eq 0; then
+						echo "$O" >> "$CURRENTSET";
 						break;
+					fi
+					if ! test -z "$O"; then
+						echo "Error running $DATAPT, throwing away output $O" >&2;
 					fi
 				done
 			else

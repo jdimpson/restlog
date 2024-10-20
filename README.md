@@ -39,9 +39,9 @@ This will move the `currentset` file (`today.csv` from our example) to archive, 
 
 `outputdir` is the directory where all other files will be written and stored to. It's safe to put the JSON config file there if you like. If you move this directory, you must manually update the value for `outputdir` in the associated JSON config file.
 
-`numretries` is the number of times a `datapt` REST URL will be retried if an error is encountered or if the `datapt` command returns an error (non-zero exit code). Note that, in the case where `datapt` is a command, that commands needs to not print anything to standard output in the case it encounters an error, becaue `restlog.sh` does not (currently) consider the exit code when appending to the `currentset` log. It's fine if it writes to standard error, though.
+`numretries` is the number of times a `datapt` REST URL will be retried if an error is encountered by `curl`, or if the `datapt` command returns an error (non-zero exit code). Note that, in the case where `datapt` is a command that returned an error, any standard output that it generates will not be appended to the `currentset` log.
 
-`archive` is a boolean (defaulting to true) that, when a *rotate* command is run, will cause the cause the `currentset` file to be renamed (or copied, if `previousset` is set) to the current year-month-day-hour-minute (and will copy the file extension if present). If this value is set to false, no archive will be made. 
+`archive` is a boolean (defaulting to true) that, when a *rotate* command is run, will cause the `currentset` file to be renamed (or copied, if `previousset` is set) to the current year-month-day-hour-minute (and will copy the file extension if present). If this value is set to false, no archive will be made. 
 
 `previousset` is a file that the `currentset` will be renamed to when `rotate` command is run. Note that it will be renamed to this file (not copied). This will happen regardless of what value `archive` is.
 
@@ -77,5 +77,3 @@ If you want rotate the log file, say every week, add another crontab entry like 
 0       0       *       *       1       /home/user1/bin/restlog.sh rotate /home/user1/speeds/speedtest.json
 ```
 This will move the `currentset` file (`thisweek.csv` from our example) to archive, and create a new file, using the `hed` value to create the first line of the file.
-
-
