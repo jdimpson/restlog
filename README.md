@@ -28,7 +28,7 @@ If you want rotate the log file, say every week, add another crontab entry like 
 ```
 0       0       *       *       1       /home/user1/bin/restlog.sh rotate /home/user1/foo.json
 ```
-This will move the `currentset` file (`today.csv` from our example) to archive, and create a new file, using the `hed` value to create the first line of the file, if desired.
+This will move the `currentset` file (`today.csv` from our example) to archive, and create a new file, using the `hed` value to create the first line of the file.
 
 ## config file
 
@@ -70,13 +70,13 @@ Then, as e.g. in a [crontab](https://man7.org/linux/man-pages/man5/crontab.5.htm
 ```
 5    1,13       *       *       *       /home/user1/bin/restlog.sh collect /home/user1/speeds/speedtest.json 
 ```
-put this in a crontab and it will collect a single data point from `speedtest` twice a day (at one AM and one PM) and save it into a file called `thisweek.csv`, in the directory `/home/user1/speeds/`. You don't have to do this in crontab, obviously, but this command is intended to be crontab friendly.
+put this in a crontab and it will collect a single data point from `speedtest-cli` command twice a day (at one AM and one PM) and save it into a file called `thisweek.csv`, in the directory `/home/user1/speeds/`. You don't have to do this in crontab, obviously, but this command is intended to be crontab friendly.
 
 ### rotate data set
 If you want rotate the log file, say every week, add another crontab entry like this:
 ```
 0       0       *       *       1       /home/user1/bin/restlog.sh rotate /home/user1/speeds/speedtest.json
 ```
-This will move the `currentset` file (`thisweek.csv` from our example) to archive, and create a new file, using the `hed` value to create the first line of the file, if desired.
+This will move the `currentset` file (`thisweek.csv` from our example) to archive, and create a new file, using the `hed` value to create the first line of the file.
 
 
