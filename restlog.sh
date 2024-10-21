@@ -149,6 +149,7 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 	OUTPUTDIR=$($JQ -r .outputdir < "$JSON");
 	NUMRETRIES=$($JQ -r .numretries < "$JSON");
 	CURRENTSET=$($JQ -r .currentset < "$JSON");
+	SLE=10; # This needs to come from config file XXX
 
 	cd "$OUTPUTDIR" || { echo "ERROR: output directory $OUTPUTDIR does not exist or is not accessible." >&2; exit 3; }
 	if test "$1" = "collect"; then
@@ -174,6 +175,7 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 					if ! test -z "$O"; then
 						echo "Error running $DATAPT, throwing away output $O" >&2;
 					fi
+					sleep $SLE;
 				done
 			else
 				echo "ERROR: datapt $TESTCMD is not a URL or executable." >&2;
