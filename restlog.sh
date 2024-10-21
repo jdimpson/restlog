@@ -155,6 +155,7 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 		DATAPT=$($JQ -r .datapt < "$JSON");
 		if echo "$DATAPT" | egrep -q '^http'; then
 			docurl "$DATAPT" "$CURRENTSET" $NUMRETRIES;
+			RET=$?
 		else
 			if echo "$DATAPT" | grep -q ' '; then
 				TESTCMD=`echo "$DATAPT" | sed -e 's/ .*//'`;
@@ -165,7 +166,8 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 				for i in `seq $NUMRETRIES`; do
 					#$DATAPT >> "$CURRENTSET";
 					O=$($DATAPT);
-					if test $? -eq 0; then
+					RET=$?
+					if test $RET -eq 0; then
 						echo "$O" >> "$CURRENTSET";
 						break;
 					fi
@@ -178,7 +180,7 @@ if test "$1" = "collect" || test "$1" = "rotate"; then
 				exit 4;
 			fi
 		fi
-		rc=$?;
+		rc=$RET;
 	fi
 	if test "$1" = "rotate"; then
 		ARCHIVE=$($JQ -r .archive < "$JSON");
